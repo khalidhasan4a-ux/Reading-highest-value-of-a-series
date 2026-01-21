@@ -5,44 +5,40 @@ import java.io.FileNotFoundException;
 
 public class Lab2DataProcessor {
 
-    
     private static final String INPUT_FILE = "Input.txt";
     private static final String OUTPUT_FILE = "Output.txt";
 
     public static void main(String[] args) {
-        
-      
+
+        int highestValue = Integer.MIN_VALUE;
+        int totalSum = 0;
+
         System.out.println("Processing data from " + INPUT_FILE + "...");
-        
-       
+
         try (Scanner fileScanner = new Scanner(new File(INPUT_FILE))) {
-            
-           
+
             if (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                
-                
-                    
-                    while (lineScanner.hasNextInt()) {
-                        int currentValue = lineScanner.nextInt();
-                        
-                       
-                        if (currentValue > highestValue) {
-                            highestValue = currentValue;
-                        }
-                        
-                        // Update total sum
-                        totalSum += currentValue;
+                Scanner lineScanner = new Scanner(line);
+
+                while (lineScanner.hasNextInt()) {
+                    int currentValue = lineScanner.nextInt();
+
+                    if (currentValue > highestValue) {
+                        highestValue = currentValue;
                     }
+
+                    totalSum += currentValue;
                 }
+
+                lineScanner.close();
             } else {
                 System.err.println("Input file is empty.");
                 return;
             }
-            
+
         } catch (FileNotFoundException e) {
             System.err.println("Error: The file " + INPUT_FILE + " was not found.");
-            
             return;
         }
 
@@ -50,20 +46,18 @@ public class Lab2DataProcessor {
         System.out.println("Highest Value found: " + highestValue);
         System.out.println("Total Sum of all values: " + totalSum);
 
-       
         System.out.println("\nWriting results to " + OUTPUT_FILE + "...");
-        
-       
-            
+
+        try (PrintWriter writer = new PrintWriter(OUTPUT_FILE)) {
+
             writer.println("--- Lab 2 Results ---");
             writer.println("Highest Value in Series: " + highestValue);
             writer.println("Total Sum of all Values: " + totalSum);
-            
+
             System.out.println("Successfully wrote results to " + OUTPUT_FILE + ".");
 
         } catch (FileNotFoundException e) {
             System.err.println("Error: Could not open or create the output file " + OUTPUT_FILE);
-            // e.printStackTrace();
         }
     }
 }
